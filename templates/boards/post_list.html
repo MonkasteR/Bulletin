@@ -1,0 +1,49 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Объявления
+{% endblock title %}
+
+{% block content %}
+<h1>Все объявления</h1>
+<h3>Всего объявлений - {{ page_obj.paginator.count }}</h3>
+<hr>
+   <!-- Выводим посты, только если они есть с помощью тега if -->
+   {% if post_list %}
+<table style="border: 2px solid white">
+           <tr>
+               <td style="border: 1px solid maroon">Дата создания/автор</td>
+               <td style="border: 1px solid maroon">Заголовок</td>
+               <td style="border: 1px solid maroon">Категории</td>
+               <td style="border: 1px solid maroon">Описание</td>
+                {% if perms.board.change_post or perms.board.delete_post %}
+               <td style="border: 1px solid maroon">Детали</td>
+                {% endif %}
+           </tr>
+           {% for post in post_list %}
+           <tr>
+               <td style="border: 1px solid maroon; text-align: left; padding: 10px">{{ post.post_time|date:'H:i d.m.Y' }}<br>Автор: {{ post.author }}</td>
+               <td style="border: 1px solid maroon; padding: 10px"><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></td>
+               <td style="border: 1px solid maroon; text-align: left; padding: 10px">{{ post.get_category_display }}</td>
+               <td style="border: 1px solid maroon; text-align: left; padding: 10px">{{ post.content }}</td>
+{#           <td>#}
+{#             {% if post.author == request.user %}#}
+{#               {% if perms.board.change_post %}#}
+{#                    <a href="{% url 'edit_post' post.id %}">Изменить | </a>#}
+{#               {% endif %}#}
+{#               {% if perms.board.delete_post %}#}
+{#                    <a href="{% url 'delete_post' post.id %}">Удалить </a>#}
+{#               {% endif %}#}
+{#           {% endif %}#}
+{#           </td>#}
+           </tr>
+           {% endfor %}
+       </table>
+   {% else %}
+       <!-- Если новостей нет, говорим, что их нет ;) -->
+       <h2>Пусто!!!</h2>
+   {% endif %}
+<!--Добавляем пагинацию-->
+{% include 'boards/paginator.html' %}
+{% endblock content %}

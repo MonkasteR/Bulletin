@@ -1,0 +1,18 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% block content %}
+    <h1>Вход</h1>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username">
+        <br>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password">
+        <br>
+        <input type="submit" value="Войти">
+    </form>
+{% endblock %}

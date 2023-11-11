@@ -1,0 +1,22 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h2>Регистрация</h2>
+<form method="POST" action="{% url 'register' %}">
+	{% csrf_token %}
+	<div>
+		<label for="email">E-mail:</label>
+		<input type="email" id="email" name="email" required>
+	</div>
+	<div>
+		<label for="password">Пароль:</label>
+		<input type="password" id="password" name="password" required>
+	</div>
+	<div>
+		<label for="name">Имя:</label>
+		<input type="text" id="name" name="name" required>
+	</div>
+	<button type="submit">Зарегистрироваться</button>
+</form>
+<p>Уже зарегистрированы? <a href="{% url 'login' %}">Войти</a></p>
+{% endblock %}
