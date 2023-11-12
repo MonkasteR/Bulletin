@@ -1,0 +1,14 @@
+{% extends 'flatpages/default.html' %}
+{% block title %}
+	CKEditor
+{% endblock title %}
+{% block content %}
+	<h1>Редактирование объявления</h1> <br>
+	<form action="" method="POST">
+		{% csrf_token %}
+		{{ form.media }}<br>
+		{{ form }}
+		<br>
+		<input type="submit" value="Сохранить">
+	</form>
+{% endblock content %}

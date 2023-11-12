@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, CreateView, ListView, DeleteView
 from django_registration.forms import RegistrationForm
@@ -37,19 +37,22 @@ class PostCreateView(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostEditView(PermissionRequiredMixin, CreateView):
-    model = Post
-    form_class = PostForm
-    permission_required = "boards.change_post"
-    template_name = "boards/post_create.html"
-    success_message = "Пост был изменен"
+def post_edit(request, post_id=None):  # редактировать объявление
+    item = get_object_or_404(Post, id=post_id)
+    form = PostForm(request.POST or None, instance=item)
+    if form.is_valid():
+        form.save()
+        return redirect("post_detail", pk=post_id)
+    return render(request, "boards/post_edit.html", {"form": form})
 
-    def get_success_url(self):
-        return reverse("post_detail", kwargs={"pk": self.object.pk})
+    # Обновляем поля новости с новыми данными
+    # post.title = request.POST.get("title")
+    # post.content = request.POST.get("content")
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    # Сохраняем изменения в базу данных
+
+    # Перенаправляем пользователя на страницу с деталями новости
+    # return redirect("post_detail", id=post_id)
 
 
 class PostDetail(DetailView):

@@ -23,8 +23,8 @@ from boards.views import (
     PostDetail,
     confirmation,
     register,
-    PostEditView,
     PostDeleteView,
+    post_edit,
 )
 
 urlpatterns = [
@@ -37,5 +37,5 @@ urlpatterns = [
     path("ckeditor/", include("ckeditor_uploader.urls")),
     path("posts/<int:pk>/", PostDetail.as_view(), name="post_detail"),
     path("posts/<int:pk>/delete/", PostDeleteView.as_view(), name="post_delete"),
-    path("posts/<int:pk>/edit/", PostEditView.as_view(), name="post_edit"),
+    path("posts/<int:post_id>/edit/", post_edit, name="post_edit"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

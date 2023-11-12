@@ -4,7 +4,7 @@
 {% block content %}
 	<h2>{{ post_detail.title }}</h2>
 	<h2>{{ post_detail.get_category_display }}</h2>
-	<p>Время создания: {{ post.post_time | date:'H:i d.m.Y' }}</p>
+	<p>Время создания: {{ post_detail.post_time | date:'H:i d.m.Y' }}</p>
 	<p>Автор: {{ post_detail.author }}</p>
 	{{ post_detail.content }}
 
