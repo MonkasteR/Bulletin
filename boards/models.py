@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Author(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="account")
     code = models.IntegerField(default=0, unique=True)
 
     def __str__(self):
@@ -42,7 +42,10 @@ class Post(models.Model):
 class Reply(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
-    article = models.ForeignKey("Post", on_delete=models.CASCADE)
+    replay_time = models.DateTimeField(auto_now_add=True)
+    article = models.ForeignKey(
+        "Post", on_delete=models.CASCADE, related_name="replies"
+    )
     status = models.BooleanField(default=False)
 
     def __str__(self):

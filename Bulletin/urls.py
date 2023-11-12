@@ -19,15 +19,23 @@ from django.contrib import admin
 from django.urls import path, include
 
 from Bulletin import settings
-from boards.views import PostDetail, confirmation, register
+from boards.views import (
+    PostDetail,
+    confirmation,
+    register,
+    PostEditView,
+    PostDeleteView,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("boards.urls")),
-    path("accounts/", include("django.contrib.auth.urls")),
+    # path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/confirmation/", confirmation, name="confirmation"),
     path("accounts/register/", register, name="register"),
     path("accounts/", include("allauth.urls")),
     path("ckeditor/", include("ckeditor_uploader.urls")),
     path("posts/<int:pk>/", PostDetail.as_view(), name="post_detail"),
+    path("posts/<int:pk>/delete/", PostDeleteView.as_view(), name="post_delete"),
+    path("posts/<int:pk>/edit/", PostEditView.as_view(), name="post_edit"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

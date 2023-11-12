@@ -1,14 +1,14 @@
 {% extends 'flatpages/default.html' %}
 
 {% block title %}
-Подтверждение регистрации
+	Подтверждение регистрации
 {% endblock title %}
 {% block content %}
-    <h1>Подтверждение регистрации</h1>
-    <form method="post">
-        {% csrf_token %}
-        <label for="confirmation_code">Код подтверждения:</label>
-        <input type="text" id="confirmation_code" name="confirmation_code">
-        <button type="submit">Подтвердить</button>
-    </form>
+	<h1>Подтверждение регистрации</h1>
+	<form method="post">
+		{% csrf_token %}
+		<label for="confirmation_code">Код подтверждения:</label>
+		<input type="text" id="confirmation_code" name="confirmation_code">
+		<button type="submit">Подтвердить</button>
+	</form>
 {% endblock %}

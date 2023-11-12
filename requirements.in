@@ -1,0 +1,6 @@
+Django
+django-allauth
+python-dotenv
+setuptools
+pillow
+django-ckeditor

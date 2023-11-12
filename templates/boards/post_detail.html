@@ -1,13 +1,18 @@
 {% extends 'flatpages/default.html' %}
+{% load static %}
 
 {% block content %}
-	<h2>{{ post.title }}</h2>
-	<h2>{{ post.get_category_display }}</h2>
+	<h2>{{ post_detail.title }}</h2>
+	<h2>{{ post_detail.get_category_display }}</h2>
 	<p>Время создания: {{ post.post_time | date:'H:i d.m.Y' }}</p>
-	<p>Автор: {{ post.author }}</p>
-	{{ post.content }}
+	<p>Автор: {{ post_detail.author }}</p>
+	{{ post_detail.content }}
 
-	{% for image in post.images.all %}
+	{% for image in post_detail.images.all %}
 		<img src="{{ image.url }}">
 	{% endfor %}
+	{% if request.user == post_detail.author %}
+		<a href="{% url 'post_edit' post_detail.id %}">Изменить | </a>
+		<a href="{% url 'post_delete' post_detail.id %}">Удалить</a>
+	{% endif %}
 {% endblock %}
