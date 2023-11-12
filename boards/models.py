@@ -46,7 +46,7 @@ class Reply(models.Model):
     article = models.ForeignKey(
         "Post", on_delete=models.CASCADE, related_name="replies"
     )
-    status = models.BooleanField(default=False)
+    status = models.BooleanField(default=None, null=True)
 
     def __str__(self):
         return self.text

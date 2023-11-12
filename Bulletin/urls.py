@@ -19,12 +19,16 @@ from django.contrib import admin
 from django.urls import path, include
 
 from Bulletin import settings
+from boards import views
 from boards.views import (
     PostDetail,
     confirmation,
     register,
     PostDeleteView,
     post_edit,
+    reply,
+    reply_accept,
+    reply_reject,
 )
 
 urlpatterns = [
@@ -38,4 +42,8 @@ urlpatterns = [
     path("posts/<int:pk>/", PostDetail.as_view(), name="post_detail"),
     path("posts/<int:pk>/delete/", PostDeleteView.as_view(), name="post_delete"),
     path("posts/<int:post_id>/edit/", post_edit, name="post_edit"),
+    path("posts/<int:post_id>/reply/", reply, name="reply"),
+    path("reply/<int:reply_id>/accept/", reply_accept, name="reply_accept"),
+    path("reply/<int:reply_id>/reject/", reply_reject, name="reply_reject"),
+    path("personal", views.personal, name="personal"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

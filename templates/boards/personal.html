@@ -1,0 +1,28 @@
+<!-- boards/personal.html -->
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+  <h2>Ваши объявления</h2>
+  {% for post in posts %}
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.content }}</p>
+    <h4>Ответы:</h4>
+    {% for reply in post.reply_set.all %}
+      <p>{{ reply.text }}</p>
+      <form action="{% url 'reply_accept' reply.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Принять">
+      </form>
+      <form action="{% url 'reply_reject' reply.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Отклонить">
+      </form>
+      <form action="{% url 'reply_delete' reply.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Удалить">
+      </form>
+    {% empty %}
+      <p>Нет откликов на это объявление.</p>
+    {% endfor %}
+  {% endfor %}
+{% endblock %}

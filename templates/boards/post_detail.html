@@ -15,4 +15,53 @@
 		<a href="{% url 'post_edit' post_detail.id %}">Изменить | </a>
 		<a href="{% url 'post_delete' post_detail.id %}">Удалить</a>
 	{% endif %}
+	<!-- reply.html -->
+	<h3>Ответы</h3>
+	{% if request.user.is_authenticated and request.user != post_detail.author %}
+		<form action="{% url 'reply' post_detail.id %}" method="POST">
+			{% csrf_token %}
+			<textarea name="text" rows="2" cols="80"></textarea>
+			<br>
+			<input type="submit" value="Отправить">
+		</form>
+	{% else %}
+		{% if request.user != post_detail.author %}
+			<button onclick="window.location.href='/accounts/register/'">Register</button>
+			<button onclick="window.location.href='/accounts/login/'">Login</button>
+		{% endif %}
+	{% endif %}
+	<!-- reply.html -->
+	{% for reply in post_detail.replies.all %}
+		<div>
+			<hr>
+			<p>{{ reply.author }}: {{ reply.text }}</p>
+			<p>Время создания: {{ reply.replay_time | date:'H:i d.m.Y' }}</p>
+			{% if reply.status == True %}
+				<p style="color: green"><b>Отклик принят</b></p>
+			{% elif reply.status == False %}
+				<p style="color: red"><b>Отклик отклонен</b></p>
+			{% elif reply.status == None %}
+				<p style="color: blue"><b>Отклик на рассмотрении</b></p>
+			{% endif %}
+			{% if post_detail.author == request.user %}
+				{% if  reply.status == None %}
+					<div style="display: flex; justify-content: center; align-items: center;">
+						<form method="post" action="{% url 'reply_accept' reply.id %}">
+							{% csrf_token %}
+							<button type="submit">Принять</button>
+						</form>
+						<br>
+						<form method="post" action="{% url 'reply_reject' reply.id %}" style="margin-left: 10px;">
+							{% csrf_token %}
+							<button type="submit">Отклонить</button>
+						</form>
+					</div>
+					<hr>
+				{% endif %}
+			{% endif %}
+		</div>
+	{% empty %}
+		<h2>Откликов нет</h2>
+	{% endfor %}
+
 {% endblock %}
