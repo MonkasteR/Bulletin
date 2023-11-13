@@ -16,9 +16,6 @@
 				<td style="border: 2px solid dimgrey; background-color: lightgrey">Заголовок</td>
 				<td style="border: 2px solid dimgrey; background-color: lightgrey">Категории</td>
 				<td style="border: 2px solid dimgrey; background-color: lightgrey">Описание</td>
-				{% if perms.board.change_post or perms.board.delete_post %}
-					<td style="border: 2px solid dimgrey; background-color: lightgrey">Детали</td>
-				{% endif %}
 			</tr>
 			{% for post in post_list %}
 				<tr>
@@ -28,23 +25,11 @@
 						href="{% url 'post_detail' post.id %}">{{ post.title }}</a></td>
 					<td style="border: 1px solid grey; text-align: left; padding: 10px">{{ post.get_category_display }}</td>
 					<td style="border: 1px solid grey; text-align: left; padding: 10px">{{ post.content }}</td>
-					{#           <td>#}
-					{#             {% if post.author == request.user %}#}
-					{#               {% if perms.board.change_post %}#}
-					{#                    <a href="{% url 'edit_post' post.id %}">Изменить | </a>#}
-					{#               {% endif %}#}
-					{#               {% if perms.board.delete_post %}#}
-					{#                    <a href="{% url 'delete_post' post.id %}">Удалить </a>#}
-					{#               {% endif %}#}
-					{#           {% endif %}#}
-					{#           </td>#}
 				</tr>
 			{% endfor %}
 		</table>
 	{% else %}
-		<!-- Если новостей нет, говорим, что их нет ;) -->
 		<h2>Пусто!!!</h2>
 	{% endif %}
-	<!--Добавляем пагинацию-->
 	{% include 'boards/paginator.html' %}
 {% endblock content %}

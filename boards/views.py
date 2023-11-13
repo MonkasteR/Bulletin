@@ -174,9 +174,9 @@ def register(request):
 @login_required
 def personal(request):
     posts = Post.objects.filter(author=request.user)
-    reply = Reply.objects.filter(article__in=posts)
+    replies = Reply.objects.filter(article__in=posts)
     chosen_id = request.GET.get("post_id")
     if chosen_id:
-        reply = reply.filter(id=chosen_id)
+        replies = replies.filter(article_id=chosen_id)
 
-    return render(request, "boards/personal.html", {"posts": posts})
+    return render(request, "boards/personal.html", {"posts": posts, "replies": replies})

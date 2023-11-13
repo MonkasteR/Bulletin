@@ -2,27 +2,47 @@
 {% extends 'flatpages/default.html' %}
 
 {% block content %}
-  <h2>Ваши объявления</h2>
-  {% for post in posts %}
-    <h3>{{ post.title }}</h3>
-    <p>{{ post.content }}</p>
-    <h4>Ответы:</h4>
-    {% for reply in post.reply_set.all %}
-      <p>{{ reply.text }}</p>
-      <form action="{% url 'reply_accept' reply.id %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Принять">
-      </form>
-      <form action="{% url 'reply_reject' reply.id %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Отклонить">
-      </form>
-      <form action="{% url 'reply_delete' reply.id %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Удалить">
-      </form>
-    {% empty %}
-      <p>Нет откликов на это объявление.</p>
-    {% endfor %}
-  {% endfor %}
+	<h2>Ваши объявления</h2>
+
+	<form action="{% url 'personal' %}" method="GET">
+		<select name="post_id">
+			<option value="">Все объявления</option>
+			{% for post in posts %}
+				<option value="{{ post.id }}">{{ post.title }}</option>
+			{% endfor %}
+		</select>
+		<input type="submit" value="Фильтровать">
+	</form>
+
+	{% for reply in replies %}
+		{% if reply.status != False %}
+			<h4>Тема: {{ reply.article.title }}</h4>
+			<p>Ответ: {{ reply.text }}</p>
+			<p>Автор: {{ reply.author }}</p>
+			<p>Дата: {{ reply.replay_time | date:'H:i d.m.Y' }}</p>
+			{% if reply.status == True %}
+				<p style="color: green"><b>Отклик принят</b></p>
+			{% elif reply.status == False %}
+				<p style="color: red"><b>Отклик отклонен</b></p>
+			{% elif reply.status == None %}
+				<p style="color: blue"><b>Отклик на рассмотрении</b></p>
+			{% endif %}
+		{% endif %}
+		{% if  reply.status == None %}
+			<div style="display: flex; justify-content: center; align-items: center;">
+				<form method="post" action="{% url 'reply_accept' reply.id %}">
+					{% csrf_token %}
+					<button type="submit">Принять</button>
+				</form>
+				<br>
+				<form method="post" action="{% url 'reply_reject' reply.id %}" style="margin-left: 10px;">
+					{% csrf_token %}
+					<button type="submit">Отклонить</button>
+				</form>
+			</div>
+			<hr>
+		{% endif %}
+	{% empty %}
+		<p>Нет откликов на это объявление.</p>
+	{% endfor %}
 {% endblock %}

@@ -14,9 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from ckeditor_uploader.views import upload, browse
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.contrib.auth.decorators import login_required
+from django.urls import path, include, re_path
+from django.views.decorators.cache import never_cache
 
 from Bulletin import settings
 from boards import views
@@ -46,4 +49,10 @@ urlpatterns = [
     path("reply/<int:reply_id>/accept/", reply_accept, name="reply_accept"),
     path("reply/<int:reply_id>/reject/", reply_reject, name="reply_reject"),
     path("personal", views.personal, name="personal"),
+    re_path(r"^ckeditor/", login_required(upload), name="ckeditor_upload"),
+    re_path(
+        r"^ckeditor/upload/",
+        login_required(never_cache(browse)),
+        name="ckeditor_browse",
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
